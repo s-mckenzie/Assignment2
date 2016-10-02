@@ -92,7 +92,7 @@ public class MainActivityFragment extends Fragment {
     /**
      * Data Adapter for Notes
      */
-    public class NoteDataAdapter extends ArrayAdapter<Note> {
+    private class NoteDataAdapter extends ArrayAdapter<Note> {
 
         public NoteDataAdapter(Context context)
         {

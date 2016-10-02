@@ -11,15 +11,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.example.a1493236.assignment2.Model.DatabaseException;
 import com.example.a1493236.assignment2.Model.Note;
 import com.example.a1493236.assignment2.Model.NoteData;
 import com.example.a1493236.assignment2.Model.NoteDatabaseHandler;
 import com.example.a1493236.assignment2.Model.NoteTable;
+import com.example.a1493236.assignment2.Model.SpinnerActivity;
 
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class MainActivityFragment extends Fragment {
     private ListView notes;
     private ArrayAdapter<Note> adapter;
 
-
     public MainActivityFragment() {
     }
 
@@ -39,7 +39,6 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
 
         // 1. Retrieve the ListView
         notes = (ListView) root.findViewById(R.id.note_ListView);
@@ -75,6 +74,17 @@ public class MainActivityFragment extends Fragment {
 
         //*************************************************************
 
+        Spinner spinner = (Spinner) root.findViewById(R.id.sort_Spinner);
+        SpinnerActivity spinnerHandler = new SpinnerActivity(data, notes, adapter);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> sort_adapter = ArrayAdapter.createFromResource(getContext(), R.array.sort_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        sort_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(sort_adapter);
+
+        spinner.setOnItemSelectedListener(spinnerHandler);
 
         return root;
     }
@@ -82,7 +92,7 @@ public class MainActivityFragment extends Fragment {
     /**
      * Data Adapter for Notes
      */
-    private class NoteDataAdapter extends ArrayAdapter<Note> {
+    public class NoteDataAdapter extends ArrayAdapter<Note> {
 
         public NoteDataAdapter(Context context)
         {
@@ -109,6 +119,7 @@ public class MainActivityFragment extends Fragment {
             ImageView color = (ImageView) root.findViewById(R.id.color_ImageView);
             ImageView reminder = (ImageView) root.findViewById(R.id.reminder_ImageView);
 
+
             title.setText(note.getTitle());
             body.setText(note.getBody());
             color.setBackgroundColor(note.getCategory());
@@ -117,10 +128,8 @@ public class MainActivityFragment extends Fragment {
                 reminder.setImageResource(android.R.drawable.ic_lock_idle_alarm);
             }
             else{
-                reminder.setImageResource(android.R.drawable.ic_lock_lock);
+                reminder.setImageResource(android.R.drawable.ic_delete);        // Because crossed out alarm somehow doesnt exist in Drawable
             }
-
-            //Button button = (Button) root.findViewById(R.id.);
 
             return root;
         }
